@@ -69,11 +69,11 @@ void ecx335af_init(void)
     nrf_gpio_pin_set(ECX335AF_XCLR_PIN);
     // SONY ECX336-CN register configuration, see Datasheet section 10.1
     // for RGB mode
-    //ecx335af_write_byte(0x00,0x0E); // [0]=0 -> enter power save mode
-    //ecx335af_write_byte(0x01,0x00);
+    //ecx335af_write_byte(0x00, 0x0E); // [0]=0 -> enter power save mode
+    //ecx335af_write_byte(0x01, 0x00);
     // for YUV mode
-    ecx335af_write_byte(0x00,0x9E); // [0]=0 -> enter power save mode
-    ecx335af_write_byte(0x01,0x20);
+    ecx335af_write_byte(0x00, 0x9E); // [0]=0 -> enter power save mode
+    ecx335af_write_byte(0x01, 0x20);
     // for register 0x00, also change the last line of this function
 
     ecx335af_write_byte(0x02, 0x00);
@@ -235,7 +235,7 @@ void ecx335af_set_luminance(ecx335af_luminance_t level)
     new_0x05 = prev_0x05 & 0xF8;         // clear lower 3 bits
     new_0x05 = new_0x05 | level;
     // write new value
-    ecx335af_write_byte(0x05,new_0x05);
+    ecx335af_write_byte(0x05, new_0x05);
     check_0x05 = ecx335af_read_byte(0x05);
     assert(check_0x05 == new_0x05);
 }
@@ -245,8 +245,8 @@ void ecx335af_set_luminance(ecx335af_luminance_t level)
  */
 void ecx335af_sleep(void)
 {
-    ecx335af_write_byte(0x00,0x9E); // enter power saving mode (YUV)
-    //en_vcc10_Write(0);        // turn off 10V power, not available in MK9B
+    ecx335af_write_byte(0x00, 0x9E); // enter power saving mode (YUV)
+    // it is now possible to turn off the 10V rail
 }
 
 /**
@@ -254,6 +254,6 @@ void ecx335af_sleep(void)
  */
 void ecx335af_awake(void)
 {
-    //en_vcc10_Write(1);        // turn on 10V power, not available in MK9B
-    ecx335af_write_byte(0x00,0x9F); // exit power saving mode (YUV)
+    // the 10V power rail needs to be turned back on first
+    ecx335af_write_byte(0x00, 0x9F); // exit power saving mode (YUV)
 }
